@@ -1,0 +1,19 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  // Public Kuro. Never rename this to "kuro": that is the private Worker.
+  "name": "kuro-public",
+  // OTHS account (onthehousesoftware@gmail.com). A deploy signed in to the personal account fails.
+  "account_id": "b3625fb215364490808bad85f9d0afa8",
+  "main": "src/worker.js",
+  "compatibility_date": "2026-11-01",
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS",
+    "run_worker_first": ["/api/*"]
+  },
+  // Per-IP flood guard for /api/*: 20 requests a minute per Cloudflare location.
+  "ratelimits": [
+    { "name": "RL", "namespace_id": "1001", "simple": { "limit": 20, "period": 60 } }
+  ],
+  "observability": { "enabled": false }
+}

@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kuro</title>
+<meta name="theme-color" content="#e3402a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Kuro">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" href="/icons/icon-192.png">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<header class="top">
+  <a class="logo" href="#practice"><span class="stamp" aria-hidden="true">黒</span><b>Kuro</b></a>
+  <nav aria-label="Sections">
+    <a href="#practice" data-v="practice">Practice</a>
+    <a href="#library" data-v="library">Library</a>
+    <a href="#help" data-v="help" aria-label="Help" style="font-weight:900;font-size:18px">?</a>
+    <a href="#settings" data-v="settings" aria-label="Settings"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></a>
+  </nav>
+</header>
+<main>
+  <div class="note" id="storeNote" hidden></div>
+
+  <section class="view" id="v-practice">
+    <div class="practice">
+      <div class="sheet" id="sheet">
+        <svg id="placeholder" viewBox="0 0 300 400" aria-hidden="true" fill="none" stroke="#d8d4cc" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M120 70c30-20 70 10 45 45" stroke-width="3" stroke-dasharray="2 9"/>
+          <circle cx="150" cy="78" r="26" stroke-width="5"/>
+          <path d="M150 104c-6 40 4 80-10 120" stroke-width="5"/>
+          <path d="M150 120c-30 10-48 36-66 60M150 120c26 4 44 22 62 6" stroke-width="5"/>
+          <path d="M140 224c-14 40-30 72-48 100M140 224c20 30 34 64 34 104" stroke-width="5"/>
+          <ellipse cx="148" cy="166" rx="26" ry="44" stroke-width="3" stroke-dasharray="3 8"/>
+        </svg>
+        <img class="fig" id="figImg" alt="" hidden>
+        <div class="empty" id="emptyMsg">Your next practice figure appears here.</div>
+        <div class="clock" id="clock" hidden>1:00</div>
+        <div class="busy" id="busy"><div><div class="brush"></div><span id="busyTxt">Sketching a figure…</span></div></div>
+      </div>
+      <div class="panel">
+        <h2>Practice a figure</h2>
+        <div class="setup" id="setupCard" hidden>
+          <h3>Set up in about 5 minutes</h3>
+          <p>Kuro draws figures with a free Cloudflare account or a Gemini key that belongs to your family. An adult sets it up once on this device.</p>
+          <div class="row">
+            <a class="btn main grow" href="/guide">Set up in about 5 minutes</a>
+            <a class="btn" href="#settings">I have a key</a>
+          </div>
+        </div>
+        <div>
+          <span class="lab">Pose</span>
+          <div class="chips" id="poseChips"></div>
+        </div>
+        <div>
+          <label class="lab" for="poseTxt">Or describe one</label>
+          <input type="text" id="poseTxt" placeholder="e.g. jumping with arms up, looking back over a shoulder" maxlength="160">
+        </div>
+        <div class="row">
+          <div class="grow"><label class="lab" for="angle">View</label>
+            <select id="angle"><option>front</option><option selected>three-quarter</option><option>side</option><option>back</option><option>high, looking down</option><option>low, looking up</option></select></div>
+          <div class="grow"><label class="lab" for="detail">Detail</label>
+            <select id="detail"><option value="gesture">Quick gesture</option><option value="clean" selected>Clean figure</option><option value="full">Fully finished</option></select></div>
+        </div>
+        <button class="btn main" id="makeBtn">Make a figure</button>
+        <p class="credit" id="creditLine" hidden></p>
+        <div>
+          <span class="lab">Pose timer</span>
+          <div class="chips" id="timeChips"></div>
+          <div class="row" style="margin-top:10px">
+            <button class="btn dark" id="goBtn">Start</button>
+            <button class="btn" id="resetBtn">Reset</button>
+            <button class="btn" id="saveFigBtn" disabled>Save to library</button>
+          </div>
+        </div>
+        <p class="msg" id="pMsg" role="status"></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="view" id="v-library">
+    <div class="lib-head">
+      <h2>My library</h2>
+      <div class="chips" id="filterChips"></div>
+    </div>
+    <div class="add">
+      <label><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>Take a photo of a drawing<input type="file" id="camIn" accept="image/*" capture="environment"></label>
+      <label><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5h16v14H4z"/><path d="M4 16l5-5 4 4 3-3 4 4"/></svg>Add from photos or a scan<input type="file" id="fileIn" accept="image/*" multiple></label>
+    </div>
+    <div class="grid" id="grid"></div>
+    <div class="backup">
+      <h3>Back up your library</h3>
+      <p class="sm">Save every drawing to one file you can keep somewhere safe, or load that file on a new device. Keys and tokens are never in the file.</p>
+      <div class="row">
+        <button class="btn" type="button" id="exportBtn">Save a backup file</button>
+        <label class="btn" for="importIn">Load a backup file</label>
+        <input type="file" id="importIn" accept="application/json,.json" hidden>
+      </div>
+      <p class="msg" id="libMsg" role="status"></p>
+    </div>
+  </section>
+
+  <section class="view help" id="v-help">
+    <h2>How Kuro works</h2>
+    <p class="lead">Kuro makes new figures to practice drawing, and keeps your drawings in a library on this device.</p>
+    <div class="help-grid">
+      <article>
+        <h3><a href="#practice">Practice</a></h3>
+        <ul>
+          <li><b>Pose:</b> pick one, like Running or Sitting, or type your own idea in "Or describe one." Surprise me lets Kuro choose.</li>
+          <li><b>View:</b> which side you see the person from: front, three-quarter, side, back, from above or from below.</li>
+          <li><b>Detail:</b> Quick gesture is loose and fast. Clean figure is a simple sketch. Fully finished adds clothes details and shading.</li>
+          <li><b>Make a figure:</b> draws a new figure. It takes about 10 to 30 seconds.</li>
+          <li><b>Pose timer:</b> pick a time and tap Start, then draw the figure before the clock runs out. It chimes when time's up. Pause and Reset do what they say.</li>
+          <li><b>Save to library:</b> keeps a figure you like so you can practice it again later.</li>
+        </ul>
+      </article>
+      <article>
+        <h3><a href="#library">Library</a></h3>
+        <ul>
+          <li><b>Take a photo of a drawing:</b> opens the camera. Lay the page flat in good light and fill the screen with it.</li>
+          <li><b>Add from photos or a scan:</b> picks pictures already on this device. You can choose several at once.</li>
+          <li><b>Clean up like a scan:</b> makes the paper whiter and the lines darker. Turn it off if a drawing looks too harsh.</li>
+          <li><b>Use as a style example:</b> stars a drawing (★). With a Gemini key, Kuro shows up to 3 starred drawings to Gemini so new figures look more like yours.</li>
+          <li><b>Tap any drawing</b> to rename it, star it, save the image to this device, practice it again or delete it. Delete asks twice so nothing goes by accident.</li>
+          <li><b>Filters:</b> All, My drawings, or Kuro figures (the ones Kuro made).</li>
+        </ul>
+      </article>
+      <article>
+        <h3><a href="#settings">Settings</a></h3>
+        <ul>
+          <li><b>Your Cloudflare account (free):</b> an adult makes a free Cloudflare account and a token that can only use Workers AI, then pastes the token and account ID here. Figures come from that account's free daily allowance, about 100 a day. <a href="/guide#cloudflare">Step-by-step guide</a>.</li>
+          <li><b>Gemini API key (optional, paid):</b> Google's Gemini can actually <i>look</i> at your starred drawings, so figures come out closest to your own style. It costs about 4¢ a figure from prepaid credit. <a href="/guide#gemini">Step-by-step guide</a>.</li>
+          <li><b>Gemini credit balance:</b> Kuro's own estimate, because Google doesn't let apps read the real balance. AI Studio's Billing page has the exact number.</li>
+          <li><b>When the Gemini credits run out,</b> Kuro switches to the Cloudflare account by itself if one is connected. When you add more credit, type the new amount and tap <b>Set balance</b>.</li>
+          <li><b>Remove all my keys</b> takes every key and token off this device.</li>
+        </ul>
+      </article>
+      <article>
+        <h3>Good to know</h3>
+        <ul>
+          <li><b>No accounts, no ads, no tracking.</b> Your drawings stay on this device. A drawing only leaves it when Gemini is shown your starred drawings to make a figure.</li>
+          <li><b>The free Cloudflare drawings run out each day.</b> When they do, Kuro tells you the time they come back, in your own time zone.</li>
+          <li><b>No internet?</b> Your library and the timer still work. Making figures needs the internet.</li>
+          <li>Clearing the browser's data or uninstalling Kuro deletes the library. Use <b>Save a backup file</b> in the Library now and then to keep them safe.</li>
+          <li>If a figure doesn't look right, just tap Make a figure again. Every one comes out different.</li>
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <section class="view" id="v-settings">
+    <h2>Settings</h2>
+    <div class="note" id="engineNote"></div>
+    <div class="style-wrap">
+      <div class="panel" id="cfCard">
+        <h3>Your Cloudflare account</h3>
+        <p class="sm">Free. Figures come from your own account's daily allowance. <a href="/guide#cloudflare">How to get these</a></p>
+        <div>
+          <label class="lab" for="cfAccount">Account ID</label>
+          <input type="text" id="cfAccount" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="32 letters and numbers">
+        </div>
+        <div>
+          <label class="lab" for="cfToken">API token (Workers AI only)</label>
+          <div class="row">
+            <input type="password" id="cfToken" class="grow" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Paste the token">
+            <button class="btn" type="button" id="showCf">Show</button>
+          </div>
+        </div>
+        <div class="row">
+          <button class="btn main grow" type="button" id="cfSave">Save</button>
+          <button class="btn dark" type="button" id="cfTest">Test connection</button>
+          <button class="btn" type="button" id="cfRemove">Remove</button>
+        </div>
+        <p class="msg" id="cfMsg" role="status"></p>
+      </div>
+      <div class="panel" id="gemCard">
+        <h3>Gemini API key</h3>
+        <p class="sm">Optional, paid. Gemini looks at your starred drawings. <a href="/guide#gemini">How to get a key</a></p>
+        <div>
+          <label class="lab" for="gemKey">Gemini API key</label>
+          <div class="row">
+            <input type="password" id="gemKey" class="grow" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Paste a key from Google AI Studio">
+            <button class="btn" type="button" id="showKey">Show</button>
+          </div>
+        </div>
+        <div>
+          <label class="lab" for="gemModel">Gemini drawing model</label>
+          <select id="gemModel">
+            <option value="best">Nano Banana 2.1 (best, 3 drawings)</option>
+            <option value="lite">Nano Banana 2 Lite (cheaper, 1 drawing)</option>
+          </select>
+        </div>
+        <div class="row">
+          <button class="btn main grow" type="button" id="saveKey">Save key</button>
+          <button class="btn" type="button" id="removeKey">Remove key</button>
+        </div>
+        <p class="msg" id="kMsg" role="status"></p>
+        <div id="creditBox" hidden>
+          <label class="lab" for="creditStart">Gemini credit balance (estimate)</label>
+          <p class="sm" id="creditInfo"></p>
+          <div class="row">
+            <input type="text" id="creditStart" class="grow" inputmode="decimal" placeholder="Amount on the key, e.g. 10.00">
+            <button class="btn dark" type="button" id="setCredit">Set balance</button>
+          </div>
+          <p class="sm">When you add more credit in AI Studio, type the new balance from its Billing page here and tap Set balance. Kuro counts down from there. AI Studio always has the exact number.</p>
+          <p class="msg" id="cMsg" role="status"></p>
+        </div>
+      </div>
+      <div class="panel">
+        <h3>Where your keys go</h3>
+        <p class="sm">Keys and tokens are saved only on this device. They're never in a backup file.</p>
+        <p class="sm">Your Gemini key goes straight from this device to Google. Your Cloudflare token goes through Kuro's server on its way to your own account. We never save or log it.</p>
+        <div class="row"><button class="btn" type="button" id="removeAll">Remove all my keys</button></div>
+        <p class="msg" id="raMsg" role="status"></p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <p>Kuro is free from <a href="https://onthehousesoftware.com">On the House Software</a>. · <a href="/privacy">Privacy</a> · <a href="/terms">Terms</a> · <a href="/guide">Parents' guide</a></p>
+</footer>
+
+<dialog id="addDlg"><form class="dlg" method="dialog" id="addForm">
+  <h3>Add to library</h3>
+  <div class="pic"><img id="addPrev" alt="Preview of the new drawing"></div>
+  <label class="toggle"><input type="checkbox" id="cleanTg" checked> Clean up like a scan (whiter paper, darker lines)</label>
+  <div><label class="lab" for="addTitle">Name</label><input type="text" id="addTitle" maxlength="80"></div>
+  <label class="toggle"><input type="checkbox" id="addStar"> Use as a style example</label>
+  <div class="row"><button class="btn main grow" id="addSave" value="save">Save</button><button class="btn" value="cancel">Cancel</button></div>
+  <p class="msg" id="addMsg"></p>
+</form></dialog>
+
+<dialog id="viewDlg"><form class="dlg" method="dialog" id="viewForm">
+  <div class="pic"><img id="viewImg" alt=""></div>
+  <div><label class="lab" for="viewTitle">Name</label><input type="text" id="viewTitle" maxlength="80"></div>
+  <label class="toggle" id="viewStarRow"><input type="checkbox" id="viewStar"> Use as a style example</label>
+  <div class="row">
+    <button class="btn dark grow" value="save">Done</button>
+    <button class="btn" id="practiceThis" type="button">Practice this</button>
+    <a class="btn" id="dlLink" download>Save image</a>
+    <button class="btn" id="delBtn" type="button">Delete</button>
+  </div>
+  <p class="msg" id="viewMsg"></p>
+</form></dialog>
+
+<script type="module" src="/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Parents' guide · Kuro</title>
+<meta name="theme-color" content="#e3402a">
+<link rel="icon" href="/icons/icon-192.png">
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<header class="top">
+  <a class="logo" href="/"><span class="stamp" aria-hidden="true">黒</span><b>Kuro</b></a>
+  <a class="btn back" href="/#practice">Open Kuro</a>
+</header>
+<main class="doc">
+  <h1>Parents' guide</h1>
+  <p class="lead">Kuro makes figures with an AI account that you own, so nobody else pays for them and nobody else sees your keys. Setting one up takes about 5 minutes. A grown-up should do these steps.</p>
+  <p class="date">Pick one to start. You can add the other later.</p>
+  <ul class="toc">
+    <li><a href="#cloudflare">Free: Cloudflare</a></li>
+    <li><a href="#gemini">Paid: Gemini</a></li>
+    <li><a href="#install">Install Kuro</a></li>
+    <li><a href="#backup">Back up the library</a></li>
+    <li><a href="#keys">Keeping keys safe</a></li>
+  </ul>
+
+  <section id="cloudflare">
+    <h2>Free: connect a Cloudflare account</h2>
+    <p>A free Cloudflare account makes about 100 figures a day. It needs no card. When the day's figures are used up it simply stops until the next day, and Kuro tells you the time they come back.</p>
+    <ol>
+      <li>Go to <a href="https://dash.cloudflare.com/sign-up">dash.cloudflare.com/sign-up</a> and make a free account. Open the email Cloudflare sends and verify your address.</li>
+      <li>In the Cloudflare dashboard, open <b>Workers AI</b> (under AI in the menu on the left), then select <b>Use REST API</b>.
+        <figure class="shot"><figcaption>Screenshot needed: the Workers AI page with "Use REST API" highlighted</figcaption></figure>
+      </li>
+      <li>Select <b>Create a Workers AI API Token</b>. Look over the details it fills in, select <b>Create API Token</b>, then <b>Copy API Token</b>. Cloudflare only shows the token once, so paste it into Kuro (step 5) before you close the page.
+        <figure class="shot"><figcaption>Screenshot needed: the token summary with "Copy API Token" (token hidden)</figcaption></figure>
+      </li>
+      <li>On the same page, under <b>Get Account ID</b>, copy the <b>Account ID</b>. It's 32 letters and numbers.
+        <figure class="shot"><figcaption>Screenshot needed: the Account ID box (ID hidden)</figcaption></figure>
+      </li>
+      <li>In Kuro, open <a href="/#settings">Settings</a>. Under <b>Your Cloudflare account</b>, paste the account ID and the token, tap <b>Test connection</b>, then <b>Save</b>.
+        <figure class="shot"><figcaption>Screenshot needed: Kuro's "Your Cloudflare account" card after a good test</figcaption></figure>
+      </li>
+    </ol>
+    <p class="tip">Making the token yourself instead of with Cloudflare's button? Give it only <b>Workers AI · Read</b> and <b>Workers AI · Edit</b>, for this one account. Nothing else is needed.</p>
+  </section>
+
+  <section id="gemini">
+    <h2>Paid: add a Gemini key</h2>
+    <p>Google's Gemini can look at up to 3 of your starred drawings, so figures come out closer to the artist's own style. It costs about 4¢ a figure from credit you add ahead of time. When the credit reaches $0 it stops, so there's no surprise bill.</p>
+    <ol>
+      <li>Go to <a href="https://aistudio.google.com">aistudio.google.com</a> and sign in with a grown-up's Google account.</li>
+      <li>Select <b>Get API key</b>, then <b>Create API key</b>. Copy the key.
+        <figure class="shot"><figcaption>Screenshot needed: AI Studio's API keys page with "Create API key" (key hidden)</figcaption></figure>
+      </li>
+      <li>Open <b>Billing</b> in AI Studio and set up prepaid credit. The smallest amount is $10. You only pay what you add.
+        <figure class="shot"><figcaption>Screenshot needed: AI Studio's Billing page showing the prepaid balance</figcaption></figure>
+      </li>
+      <li>In Kuro, open <a href="/#settings">Settings</a>. Under <b>Gemini API key</b>, paste the key and tap <b>Save key</b>. Kuro checks it with Google first.</li>
+      <li>Type the amount you added in <b>Gemini credit balance</b> and tap <b>Set balance</b>. Kuro counts down from there as an estimate. AI Studio's Billing page always has the exact number.
+        <figure class="shot"><figcaption>Screenshot needed: Kuro's Gemini card with the balance set</figcaption></figure>
+      </li>
+      <li>In the Library, star up to 3 drawings with <b>Use as a style example</b>.</li>
+    </ol>
+    <p class="tip">If you connect both, Kuro uses Gemini first and switches to your Cloudflare account by itself when the Gemini credit runs out.</p>
+  </section>
+
+  <section id="install">
+    <h2>Install Kuro</h2>
+    <p>Kuro works in the browser, and installing it puts it on the home screen like any other app. It still works offline for the library and timer.</p>
+    <h3>Android</h3>
+    <p>In Chrome, open Kuro, tap the <b>⋮</b> menu, then <b>Install app</b> (or <b>Add to Home screen</b>).</p>
+    <h3>iPhone and iPad</h3>
+    <p>In Safari, open Kuro, tap the <b>Share</b> button, then <b>Add to Home Screen</b> and <b>Add</b>.</p>
+    <figure class="shot"><figcaption>Screenshot needed: Safari's share sheet with "Add to Home Screen"</figcaption></figure>
+    <h3>Mac</h3>
+    <p>In Safari, open Kuro and choose <b>File → Add to Dock</b>. In Chrome, click the install icon at the right end of the address bar.</p>
+    <h3>Windows and Chromebook</h3>
+    <p>In Chrome or Edge, click the install icon at the right end of the address bar.</p>
+  </section>
+
+  <section id="backup">
+    <h2>Back up the library</h2>
+    <p>Drawings are saved only on the device. If the browser's data is cleared, or Kuro is uninstalled, the library goes with it. iPhones and iPads can clear a website's data on their own after a while without use, so back up there most of all.</p>
+    <ol>
+      <li>Open the <a href="/#library">Library</a> and find <b>Back up your library</b>.</li>
+      <li>Tap <b>Save a backup file</b>. Kuro saves a file named like <code>kuro-library-2026-11-26.json</code>. Keep it somewhere safe, such as your files app or cloud drive.</li>
+      <li>To bring the drawings back, on this device or a new one, tap <b>Load a backup file</b> and choose that file. Drawings already in the library are skipped, so nothing doubles up.</li>
+    </ol>
+    <p class="tip">Keys and tokens are never in a backup file. After loading a backup on a new device, add your key or Cloudflare account again in Settings.</p>
+  </section>
+
+  <section id="keys">
+    <h2>Keeping keys safe</h2>
+    <ul>
+      <li>Keys and tokens are saved only on this device. Your Gemini key goes straight to Google. Your Cloudflare token goes through Kuro's server on its way to your own account, and is never saved or logged. More on the <a href="/privacy">Privacy</a> page.</li>
+      <li>Don't share a key or token. If you think someone has seen one, delete it in Cloudflare or AI Studio and make a new one.</li>
+      <li><b>Remove all my keys</b> in Settings takes every key and token off this device, for example before giving the device to someone else.</li>
+    </ul>
+  </section>
+</main>
+<footer class="foot">
+  <p>Kuro is free from <a href="https://onthehousesoftware.com">On the House Software</a>. · <a href="/privacy">Privacy</a> · <a href="/terms">Terms</a> · <a href="/guide">Parents' guide</a></p>
+</footer>
+</body>
+</html>
