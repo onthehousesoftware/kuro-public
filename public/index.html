@@ -40,6 +40,7 @@
         <img class="fig" id="figImg" alt="" hidden>
         <div class="empty" id="emptyMsg">Your next practice figure appears here.</div>
         <div class="clock" id="clock" hidden>1:00</div>
+        <button class="expand" id="expandBtn" type="button" aria-label="Full screen" hidden><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
         <div class="busy" id="busy"><div><div class="brush"></div><span id="busyTxt">Sketching a figure…</span></div></div>
       </div>
       <div class="panel">
@@ -116,6 +117,7 @@
           <li><b>Detail:</b> Quick gesture is loose and fast. Clean figure is a simple sketch. Fully finished adds clothes details and shading.</li>
           <li><b>Make a figure:</b> draws a new figure. It takes about 10 to 30 seconds.</li>
           <li><b>Pose timer:</b> pick a time and tap Start, then draw the figure before the clock runs out. It chimes when time's up. Pause and Reset do what they say.</li>
+          <li><b>Tap the figure</b> to see it full screen. Pinch to zoom in on tiny details, drag to move around, double-tap to zoom in or back out. Tap ✕ to go back.</li>
           <li><b>Save to library:</b> keeps a figure you like so you can practice it again later.</li>
         </ul>
       </article>
@@ -126,7 +128,7 @@
           <li><b>Add from photos or a scan:</b> picks pictures already on this device. You can choose several at once.</li>
           <li><b>Clean up like a scan:</b> makes the paper whiter and the lines darker. Turn it off if a drawing looks too harsh.</li>
           <li><b>Use as a style example:</b> stars a drawing (★). With a Gemini key, Kuro shows up to 3 starred drawings to Gemini so new figures look more like yours.</li>
-          <li><b>Tap any drawing</b> to rename it, star it, save the image to this device, practice it again or delete it. Delete asks twice so nothing goes by accident.</li>
+          <li><b>Tap any drawing</b>, then tap its picture to see it full screen and zoom in. Or use the other buttons to rename it, star it, save the image to this device, practice it again or delete it. Delete asks twice so nothing goes by accident.</li>
           <li><b>Filters:</b> All, My drawings, or Kuro figures (the ones Kuro made).</li>
         </ul>
       </article>
@@ -248,6 +250,13 @@
   </div>
   <p class="msg" id="viewMsg"></p>
 </form></dialog>
+
+<dialog id="zoomDlg" aria-label="Full screen drawing">
+  <div class="zstage" id="zStage"><img id="zImg" alt="" draggable="false"></div>
+  <div class="clock zclock" id="zClock" hidden></div>
+  <button class="zclose" id="zClose" type="button" aria-label="Exit full screen"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+  <p class="zhint" id="zHint">Pinch to zoom · drag to move · double-tap to zoom in or out</p>
+</dialog>
 
 <script type="module" src="/app.js"></script>
 </body>

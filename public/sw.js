@@ -1,5 +1,5 @@
 // Kuro service worker: keeps the app shell available offline. API calls always go to the network.
-const CACHE = "kuro-public-v1";
+const CACHE = "kuro-public-v2";
 // Clean URLs only: the asset server redirects /x.html to /x, and a cached redirect can't be shown for a page offline.
 const SHELL = ["/", "/styles.css", "/app.js", "/core.js", "/prompts.js", "/gemini.js", "/privacy", "/terms", "/guide", "/manifest.webmanifest", "/icons/icon-192.png", "/icons/icon-512.png", "/fonts/zen-maru-gothic-latin-500-normal.woff2", "/fonts/zen-maru-gothic-latin-700-normal.woff2", "/fonts/zen-maru-gothic-latin-900-normal.woff2", "/fonts/nunito-sans-latin-400-normal.woff2", "/fonts/nunito-sans-latin-600-normal.woff2", "/fonts/nunito-sans-latin-700-normal.woff2"];
 

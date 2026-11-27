@@ -227,7 +227,7 @@ let figUrl = null;
 function showFigure(blob, isNew) {
   if (figUrl) URL.revokeObjectURL(figUrl); figUrl = URL.createObjectURL(blob);
   const img = $("figImg"); img.src = figUrl; img.hidden = false; img.alt = "Practice figure";
-  $("placeholder").style.display = "none"; $("emptyMsg").hidden = true;
+  $("placeholder").style.display = "none"; $("emptyMsg").hidden = true; $("expandBtn").hidden = false;
   state.lastBlob = isNew ? blob : null; $("saveFigBtn").disabled = !isNew; resetTimer();
 }
 const CREDITS_OUT = "The Gemini credits are used up. Add more in Google AI Studio, or connect a Cloudflare account in Settings.";
@@ -399,7 +399,10 @@ $("removeAll").onclick = async () => {
 
 /* ---------- pose timer ---------- */
 const fmt = (s) => Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0");
-function paint() { const c = $("clock"); c.hidden = false; c.textContent = fmt(state.left); c.classList.toggle("done", state.left === 0); }
+function paint() {
+  const c = $("clock"); c.hidden = false; c.textContent = fmt(state.left); c.classList.toggle("done", state.left === 0);
+  const z = $("zClock"); z.hidden = !Z.withClock; z.textContent = c.textContent; z.classList.toggle("done", state.left === 0);
+}
 function resetTimer() { clearInterval(state.run); state.run = null; state.left = state.secs; $("goBtn").textContent = "Start"; paint(); }
 function chime() { try { const a = new AudioContext(), o = a.createOscillator(), g = a.createGain(); o.frequency.value = 880; o.connect(g); g.connect(a.destination); g.gain.setValueAtTime(0.2, a.currentTime); g.gain.exponentialRampToValueAtTime(0.001, a.currentTime + 1.2); o.start(); o.stop(a.currentTime + 1.2); } catch {} }
 $("goBtn").onclick = () => {
@@ -411,6 +414,80 @@ $("goBtn").onclick = () => {
 $("resetBtn").onclick = resetTimer;
 chipRow($("timeChips"), TIMES, state.secs, (v) => { state.secs = v; resetTimer(); });
 chipRow($("poseChips"), POSES.map((p) => [p, p]), state.pose, (v) => { state.pose = v; $("poseTxt").value = ""; });
+
+/* ---------- full-screen viewer: pinch / drag / double-tap zoom ---------- */
+const Z = { s: 1, x: 0, y: 0, pts: new Map(), g: null, tap: 0, withClock: false, hintT: null };
+const MAXZ = 8;
+function zFit() {
+  const st = $("zStage").getBoundingClientRect(), im = $("zImg");
+  const r = (im.naturalWidth || 1) / (im.naturalHeight || 1);
+  const w = Math.min(st.width, st.height * r);
+  return { W: st.width, H: st.height, w, h: w / r, cx: st.left + st.width / 2, cy: st.top + st.height / 2 };
+}
+function zApply() {
+  const f = zFit();
+  Z.s = Math.min(MAXZ, Math.max(1, Z.s));
+  const mx = Math.max(0, (f.w * Z.s - f.W) / 2), my = Math.max(0, (f.h * Z.s - f.H) / 2);
+  Z.x = Math.min(mx, Math.max(-mx, Z.x)); Z.y = Math.min(my, Math.max(-my, Z.y));
+  $("zImg").style.transform = `translate(${Z.x}px,${Z.y}px) scale(${Z.s})`;
+}
+// zoom to scale s keeping screen point (px,py) under the finger
+function zZoomAt(s, px, py) {
+  const f = zFit(), k = Math.min(MAXZ, Math.max(1, s)) / Z.s;
+  const fx = px - f.cx, fy = py - f.cy;
+  Z.x = fx - (fx - Z.x) * k; Z.y = fy - (fy - Z.y) * k; Z.s *= k; zApply();
+}
+function zGesture() {
+  const p = [...Z.pts.values()];
+  if (p.length >= 2) {
+    const [a, b] = p;
+    Z.g = { pinch: true, d: Math.hypot(b.x - a.x, b.y - a.y) || 1, mx: (a.x + b.x) / 2, my: (a.y + b.y) / 2, s: Z.s, x: Z.x, y: Z.y };
+  } else if (p.length === 1) Z.g = { pinch: false, px: p[0].x, py: p[0].y, x: Z.x, y: Z.y };
+  else Z.g = null;
+}
+function openZoom(src, alt, withClock) {
+  Z.s = 1; Z.x = 0; Z.y = 0; Z.pts.clear(); Z.g = null; Z.withClock = withClock;
+  const im = $("zImg"); im.src = src; im.alt = alt || "Drawing"; im.style.transform = "";
+  paint();
+  $("zHint").classList.remove("off"); clearTimeout(Z.hintT); Z.hintT = setTimeout(() => $("zHint").classList.add("off"), 3500);
+  $("zoomDlg").showModal(); $("zClose").focus();
+}
+const stage = $("zStage");
+stage.addEventListener("pointerdown", (e) => {
+  stage.setPointerCapture(e.pointerId); Z.pts.set(e.pointerId, { x: e.clientX, y: e.clientY }); zGesture();
+  if (Z.pts.size === 1) {
+    const now = Date.now();
+    if (now - Z.tap < 300) { // double-tap: zoom in where tapped, or back out
+      Z.tap = 0;
+      if (Z.s > 1.05) { Z.s = 1; Z.x = 0; Z.y = 0; zApply(); } else zZoomAt(3, e.clientX, e.clientY);
+      zGesture();
+    } else Z.tap = now;
+  }
+});
+stage.addEventListener("pointermove", (e) => {
+  if (!Z.pts.has(e.pointerId) || !Z.g) return;
+  Z.pts.set(e.pointerId, { x: e.clientX, y: e.clientY });
+  const p = [...Z.pts.values()], g = Z.g;
+  if (g.pinch && p.length >= 2) {
+    const [a, b] = p, d = Math.hypot(b.x - a.x, b.y - a.y), mx = (a.x + b.x) / 2, my = (a.y + b.y) / 2;
+    const f = zFit(), s = Math.min(MAXZ, Math.max(1, g.s * d / g.d)), k = s / g.s;
+    // the point that was under the fingers' midpoint stays under it (pinch + pan together)
+    Z.x = (mx - f.cx) - ((g.mx - f.cx) - g.x) * k; Z.y = (my - f.cy) - ((g.my - f.cy) - g.y) * k; Z.s = s; zApply();
+  } else if (!g.pinch) {
+    if (Math.hypot(e.clientX - g.px, e.clientY - g.py) > 8) Z.tap = 0;
+    Z.x = g.x + e.clientX - g.px; Z.y = g.y + e.clientY - g.py; zApply();
+  }
+});
+const zUp = (e) => { Z.pts.delete(e.pointerId); zGesture(); };
+stage.addEventListener("pointerup", zUp); stage.addEventListener("pointercancel", zUp);
+stage.addEventListener("wheel", (e) => { e.preventDefault(); zZoomAt(Z.s * Math.exp(-e.deltaY * 0.0015), e.clientX, e.clientY); }, { passive: false });
+for (const ev of ["gesturestart", "gesturechange"]) stage.addEventListener(ev, (e) => e.preventDefault()); // iPad Safari: stop page zoom
+addEventListener("resize", () => { if ($("zoomDlg").open) zApply(); });
+$("zClose").onclick = () => $("zoomDlg").close();
+$("zoomDlg").addEventListener("close", () => { $("zImg").removeAttribute("src"); });
+const openFig = () => { if (!$("figImg").hidden) openZoom($("figImg").src, "Practice figure", true); };
+$("figImg").onclick = openFig; $("expandBtn").onclick = openFig;
+$("viewImg").onclick = () => { const it = state.viewing; if (it) openZoom(urlOf(it), it.title, false); };
 
 /* ---------- start ---------- */
 route(); paint(); $("clock").hidden = true; loadLib();

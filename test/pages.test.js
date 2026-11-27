@@ -8,7 +8,7 @@ const EMAIL = "onthehousesoftware@gmail.com";
 
 test("service worker caches the public shell under a new name", () => {
   const sw = read("sw.js");
-  assert.match(sw, /const CACHE = "kuro-public-v1";/);
+  assert.match(sw, /const CACHE = "kuro-public-v2";/);
   const shell = JSON.parse(sw.match(/const SHELL = (\[[^\]]*\]);/)[1]);
   for (const p of ["/", "/styles.css", "/app.js", "/core.js", "/prompts.js", "/gemini.js",
     "/privacy", "/terms", "/guide", "/manifest.webmanifest"]) {
@@ -94,4 +94,17 @@ test("each font file exists, has an @font-face, and is in the offline shell", ()
   for (const w of ["400", "600", "700"]) assert.match(css, new RegExp(`font-family:"Nunito Sans";[^}]*font-weight:${w}`));
   assert.ok(existsSync(new URL("fonts/OFL-zen-maru-gothic.txt", pub)));
   assert.ok(existsSync(new URL("fonts/OFL-nunito-sans.txt", pub)));
+});
+
+test("full-screen viewer is in the page, styled, and wired up", () => {
+  const html = read("index.html"), css = read("styles.css"), js = read("app.js");
+  for (const id of ["expandBtn", "zoomDlg", "zStage", "zImg", "zClock", "zClose", "zHint"]) assert.match(html, new RegExp(`id="${id}"`), id);
+  assert.ok(html.indexOf('id="zoomDlg"') < html.indexOf('src="/app.js"'), "viewer dialog comes before the app script");
+  assert.match(html, /Tap the figure<\/b> to see it full screen/);
+  assert.match(html, /then tap its picture to see it full screen/);
+  assert.match(css, /#zoomDlg\{width:100vw;height:100dvh/);
+  assert.match(css, /\.zstage\{[^}]*touch-action:none/);
+  for (const fn of ["function zFit", "function zApply", "function zZoomAt", "function zGesture", "function openZoom"]) assert.ok(js.includes(fn), fn);
+  assert.match(js, /\$\("viewImg"\)\.onclick/);
+  assert.match(js, /\$\("expandBtn"\)\.hidden = false/);
 });
